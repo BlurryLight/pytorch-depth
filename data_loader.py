@@ -15,7 +15,7 @@ class MyDataset(Dataset):
         for line in fh:
             line = line.rstrip()
             words = line.split(',')
-            imgs.append((int(words[0]), words[1], words[1]))
+            imgs.append((int(words[0]), words[1], words[2]))
         self.imgs = imgs
         self.transform = transform
         self.target_transform = target_transform
@@ -25,9 +25,9 @@ class MyDataset(Dataset):
         rgb_img = cv2.imread(os.path.join('data/images', rgb_image))
         depth_img = cv2.imread(os.path.join(
             'data/images', depth_image), cv2.IMREAD_ANYDEPTH)
-        # depth_img = cv2.convertScaleAbs(depth_img,alpha=(255.0/depth_img.max()))
-        rgb_img.resize(32, 32, 3)
-        depth_img.resize(32, 32)
+        depth_img = cv2.convertScaleAbs(depth_img,alpha=(255.0/depth_img.max()))
+        rgb_img = cv2.resize(rgb_img,dsize=(32,32))
+        depth_img = cv2.resize(depth_img,dsize=(32,32))
         rgbd = np.zeros((4, 32, 32), dtype=np.float32)
         rgbd[0, :, :] = rgb_img[:, :,  0]
         rgbd[1, :, :] = rgb_img[:, :,  1]
